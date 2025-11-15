@@ -1,0 +1,18 @@
+This map is based on work by: Sameboat
+Original file: https://commons.wikimedia.org/wiki/File:London_Underground_Overground_DLR_Crossrail_map_alt.svg
+
+Original license: Creative Commons Attribution-Share Alike 4.0 International
+License link: https://creativecommons.org/licenses/by-sa/4.0/
+
+Summary of permissions:
+- You may copy, distribute, and transmit the work.
+- You may remix or adapt the work.
+- You must give appropriate credit.
+- You must indicate if changes were made.
+- Any derivatives must be distributed under the same or a compatible license.
+
+Changes made by this project:
+- Interactive highlighting and styling applied in the web application.
+- Integration into a React/Next.js interface.
+
+This derivative SVG remains licensed under CC BY-SA 4.0.
