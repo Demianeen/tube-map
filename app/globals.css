@@ -131,7 +131,10 @@
   pointer-events: none;
   visibility: hidden;
   --base-radius: 8;
-  animation: ringPulseRadius 1.2s linear infinite;
+  --highlight-scale: 1.6;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ringPulseScale 1.2s linear infinite;
   r: calc(var(--base-radius));
 }
 
@@ -140,26 +143,28 @@
   visibility: visible;
 }
 
-@keyframes ringPulseRadius {
+@keyframes ringPulseScale {
   0% {
     opacity: 0;
-    scale: 0.8;
+    /* start exactly at base radius */
+    scale: 1;
   }
   20% {
     opacity: 1;
-    scale: 1.1;
+    /* ease towards final scale while keeping a similar curve shape */
+    scale: calc(1 + (var(--highlight-scale) - 1) * 0.35);
   }
   45% {
     opacity: 0.6;
-    scale: 1.6;
+    scale: calc(1 + (var(--highlight-scale) - 1) * 0.8);
   }
   70% {
     opacity: 0;
-    scale: 1.9;
+    scale: var(--highlight-scale);
   }
   100% {
     opacity: 0;
-    scale: 1.9;
+    scale: var(--highlight-scale);
   }
 }
 

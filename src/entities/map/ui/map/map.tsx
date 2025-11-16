@@ -172,9 +172,15 @@ function highlightStationElement(
   
   if (center) {
     // Set the base radius as a CSS custom property
-    // CSS will handle animating the radius via --radius-multiplier
     const clampedRadius = Math.max(6, Math.min(center.radius, 14));
     ring.style.setProperty("--base-radius", String(clampedRadius));
+    
+    // Calculate end scale to achieve roughly constant pixel growth
+    // Target: add ~25 SVG units of radius regardless of station size
+    const targetDelta = 25;
+    let endScale = 1 + targetDelta / clampedRadius;
+    
+    ring.style.setProperty("--highlight-scale", String(endScale));
     ring.classList.add("visible");
     wrapper.setAttribute("transform", `translate(${center.cx}, ${center.cy})`);
   } else {
