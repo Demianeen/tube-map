@@ -98,6 +98,17 @@ text {font-family:Arimo,Liberation Sans,Helvetica,Arial,sans-serif}
 .zonefw {font-size:35px;fill:#fff;stroke:#ddd;stroke-width:1}
 .zonefg {font-size:35px;fill:#efefef;stroke:#ddd;stroke-width:1}
 .zonedf {font-size:13px;fill:#999;stroke:none}
+
+.station-highlight-wrapper {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+#station-highlight-ring {
+  stroke: #ff0000;
+  fill: none;
+  stroke-width: 3;
+}
 	</style>
 	<defs>
 		<g id="term"><path class="me" d="M -7.5,0 H 7.5"/></g>
@@ -4240,4 +4251,9 @@ text {font-family:Arimo,Liberation Sans,Helvetica,Arial,sans-serif}
 		<path class="ftfl" style="stroke:none" d="M -10,0 L 0,0 v 27 h 982 q 15,0 27,-9 l 12,-9 q 12,-9 27,-9 z"/>
 		<text x="7" y="20" class="b" style="font-size:20px;fill:#fff">Route map of London Underground, London Overground, Docklands Light Railway and Elizabeth line</text>
 	</g>
+<g id="highlight-layer">
+<g id="station-highlight-wrapper" class="station-highlight-wrapper" visibility="hidden">
+<circle id="station-highlight-ring" cx="0" cy="0" r="0"> </circle>
+</g>
+</g>
 </svg>

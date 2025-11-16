@@ -11,43 +11,77 @@ const queryMapElement = (svg: SVGSVGElement, elementId: string): SVGGraphicsElem
   return svg.querySelector(`#${elementId}`);
 };
 
+function highlightStation(
+  svg: SVGSVGElement,
+  stationId: string,
+): void {
+  const stationEl = queryMapElement(svg, stationId);
+  console.log("stationEl", stationEl);
+
+  if (!stationEl) return;
+
+  highlightStationElement(svg, stationEl);
+}
+
+function highlightStationElement(
+  svg: SVGSVGElement,
+  stationEl: SVGGraphicsElement,
+): void {
+  const wrapper = queryMapElement(svg, "station-highlight-wrapper");
+  const ring = queryMapElement(svg, "station-highlight-ring");
+  
+  console.log("highlightStationElement", svg, stationEl);
+  console.log("ring", ring);
+  if (!ring || !wrapper) return;
+
+  try {
+    const bbox = stationEl.getBBox();
+    const cx = bbox.x + bbox.width / 2;
+    const cy = bbox.y + bbox.height / 2;
+    const r = Math.max(bbox.width, bbox.height) * 0.8 || 8;
+
+    ring.setAttribute("r", String(r));
+    ring.classList.add("visible");
+
+    wrapper.setAttribute("transform", `translate(${cx}, ${cy})`);
+  } catch {
+    // getBBox might fail in some cases, fallback to hidden
+    ring.classList.remove("visible");
+  }
+}
+
 export const MapComponent = ({ highlightedStationId }: MapComponentProps) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const previousHighlightedRef = useRef<string | null>(null);
 
   useEffect(() => {
     const container = mapContainerRef.current;
     if (!container) return;
 
-    // Remove highlight from previously highlighted station
-    if (previousHighlightedRef.current) {
-      const previousElement = queryStationElement(container, previousHighlightedRef.current);
-      if (previousElement) {
-        previousElement.classList.remove("station-highlight");
-      }
-    }
+    // Find the SVG element inside the container
+    const svg = container.querySelector<SVGSVGElement>("svg");
+    if (!svg) return;
+
+    const ring = queryMapElement(svg, "station-highlight-ring");
 
     if (!highlightedStationId) {
-      previousHighlightedRef.current = null;
+      // Hide the ring when no station is selected
+      if (ring) {
+        ring.classList.remove("visible");
+      }
       return;
     }
 
-    // Find and highlight the selected station
-    const stationElement = queryStationElement(container, highlightedStationId);
-    console.log("stationElement", stationElement);
+    // Highlight the selected station
+    highlightStation(svg, highlightedStationId);
 
+    // Find and scroll to the station element
+    const stationElement = queryMapElement(svg, highlightedStationId);
     if (stationElement) {
-      // Add highlight class
-      stationElement.classList.add("station-highlight");
-
-      // Scroll into view
       stationElement.scrollIntoView({
         behavior: "smooth",
         block: "center",
         inline: "center",
       });
-
-      previousHighlightedRef.current = highlightedStationId;
     }
   }, [highlightedStationId]);
 
