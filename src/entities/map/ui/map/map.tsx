@@ -7,8 +7,8 @@ interface MapComponentProps {
   highlightedStationId?: string | null;
 }
 
-const queryStationElement = (container: HTMLDivElement, stationId: string) => {
-  return container.querySelector(`#map_svg__${stationId}`);
+const queryMapElement = (svg: SVGSVGElement, elementId: string): SVGGraphicsElement | null => {
+  return svg.querySelector(`#${elementId}`);
 };
 
 export const MapComponent = ({ highlightedStationId }: MapComponentProps) => {
