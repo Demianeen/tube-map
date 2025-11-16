@@ -5,6 +5,7 @@ import Map from "@/shared/assets/map/map.svg";
 
 interface MapComponentProps {
   highlightedStationId?: string | null;
+  onUnselect?: () => void;
 }
 
 const queryMapElement = (svg: SVGSVGElement, elementId: string): SVGGraphicsElement | null => {
@@ -178,7 +179,7 @@ function highlightStationElement(
     // Calculate end scale to achieve roughly constant pixel growth
     // Target: add ~25 SVG units of radius regardless of station size
     const targetDelta = 25;
-    let endScale = 1 + targetDelta / clampedRadius;
+    const endScale = 1 + targetDelta / clampedRadius;
     
     ring.style.setProperty("--highlight-scale", String(endScale));
     ring.classList.add("visible");
@@ -190,7 +191,7 @@ function highlightStationElement(
   }
 }
 
-export const MapComponent = ({ highlightedStationId }: MapComponentProps) => {
+export const MapComponent = ({ highlightedStationId, onUnselect }: MapComponentProps) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -226,7 +227,15 @@ export const MapComponent = ({ highlightedStationId }: MapComponentProps) => {
   }, [highlightedStationId]);
 
   return (
-    <div ref={mapContainerRef} className="w-full h-full overflow-auto">
+    <div
+      ref={mapContainerRef}
+      className="w-full h-full overflow-auto"
+      onClick={() => {
+        if (onUnselect) {
+          onUnselect();
+        }
+      }}
+    >
       <Map />
     </div>
   );

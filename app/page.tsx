@@ -81,7 +81,10 @@ export default function Home() {
         />
       </div>
       <div className="flex-1 overflow-auto">
-        <Map highlightedStationId={selectedStationId} />
+        <Map 
+          highlightedStationId={selectedStationId}
+          onUnselect={() => setSelectedStationId(null)}
+        />
       </div>
     </div>
   );
