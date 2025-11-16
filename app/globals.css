@@ -120,3 +120,46 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Station highlighting styles */
+
+#station-highlight-ring {
+  fill: none;
+  stroke: #ff0000;
+  stroke-width: 1px;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  --base-radius: 8;
+  animation: ringPulseRadius 1.2s linear infinite;
+  r: calc(var(--base-radius));
+}
+
+#station-highlight-ring.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes ringPulseRadius {
+  0% {
+    opacity: 0;
+    scale: 0.8;
+  }
+  20% {
+    opacity: 1;
+    scale: 1.1;
+  }
+  45% {
+    opacity: 0.6;
+    scale: 1.6;
+  }
+  70% {
+    opacity: 0;
+    scale: 1.9;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.9;
+  }
+}
+

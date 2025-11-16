@@ -38,9 +38,11 @@ function highlightStationElement(
     const bbox = stationEl.getBBox();
     const cx = bbox.x + bbox.width / 2;
     const cy = bbox.y + bbox.height / 2;
-    const r = Math.max(bbox.width, bbox.height) * 0.8 || 8;
+    const baseRadius = Math.max(bbox.width, bbox.height) * 0.8 || 8;
 
-    ring.setAttribute("r", String(r));
+    // Set the base radius as a CSS custom property
+    // CSS will handle animating the radius via --radius-multiplier
+    ring.style.setProperty("--base-radius", String(baseRadius));
     ring.classList.add("visible");
 
     wrapper.setAttribute("transform", `translate(${cx}, ${cy})`);
