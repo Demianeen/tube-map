@@ -14,7 +14,7 @@ import {
   CommandList,
 } from "@/shared/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { stations } from "@/entities/map/model/stations";
+import { stations } from "@/entities/map";
 import { useRef, useEffect } from "react";
 import { useKeyboardShortcut } from "@/shared/hooks/use-keyboard-shortcut";
 
