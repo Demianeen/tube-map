@@ -4128,6 +4128,7 @@ text {font-family:Arimo,Liberation Sans,Helvetica,Arial,sans-serif}
 					<text transform="translate(100,820)" class="felizabeth">Higher fares apply<tspan x="0" dy="13"> on all trips via<tspan x="0" dy="13"> this section of tracks.</tspan></tspan></text>
 				</g>
 				<text transform="translate(0,1040)"><tspan x="-7" dy="0">* </tspan><tspan x="0" dy="0">Passengers can travel between all rail stations within Heathrow <tspan x="0" dy="13">Airport free of charge with an Oyster card or contactless card, <tspan x="0" dy="13">regardless of London Underground, Elizabeth line or Heathrow Express. <tspan x="0" dy="20">Passengers may also use Hatton Cross for changing trains <tspan x="0" dy="13">back to Heathrow Airport without exiting the station.</tspan></tspan></tspan></tspan></tspan></text>
+				<a xlink:href="https://commons.wikimedia.org/wiki/File:London_Underground_Overground_DLR_Crossrail_map_alt.svg" target="_blank"><text transform="translate(0,1130)" class="small" fill="#999"><tspan x="0" dy="0">This map is based on work by Wikimedians — CC BY-SA 4.0 — modified for interactivity.</tspan></text></a>
 				<g id="National_Rail_continuation">
 					<g cursor="help">
 						<title>Thameslink (National Rail) local service towards Luton Airport and Bedford</title>
