@@ -120,3 +120,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Station highlighting styles */
+
+.station-highlight {
+  stroke: #ff0000 !important;
+  stroke-width: 4 !important;
+  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.8));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.station-highlight circle,
+.station-highlight path,
+.station-highlight rect {
+  stroke: #ff0000 !important;
+  stroke-width: 4 !important;
+  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.8));
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
