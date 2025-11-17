@@ -4,6 +4,7 @@ import * as React from "react";
 import { Check, Search } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCommandState } from "cmdk";
+import Fuse from "fuse.js";
 
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -43,15 +44,24 @@ function VirtualizedStationList({
     (state) => state.value,
   ) as string | undefined;
 
-  // Get filtered stations based on search
+  // Initialize Fuse instance for fuzzy search
+  const fuse = useMemo(
+    () =>
+      new Fuse(stations, {
+        keys: ["label"],
+        threshold: 0.3, // Lower threshold = stricter matching (0.0 = exact, 1.0 = match anything)
+        ignoreLocation: true, // Match regardless of where the pattern appears in the string
+        minMatchCharLength: 1, // Minimum number of characters that must be matched
+      }),
+    [],
+  );
+
+  // Get filtered stations based on fuzzy search
   const filteredStations = useMemo(() => {
     if (!cmdkSearch.trim()) return stations;
-    const searchLower = cmdkSearch.toLowerCase();
-    return stations.filter(
-      (station) =>
-        station.label.toLowerCase().includes(searchLower),
-    );
-  }, [cmdkSearch]);
+    const results = fuse.search(cmdkSearch);
+    return results.map((result) => result.item);
+  }, [cmdkSearch, fuse]);
 
 
   // Callback ref to find and store the scroll container
