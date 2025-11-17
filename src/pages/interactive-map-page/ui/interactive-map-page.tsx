@@ -75,7 +75,7 @@ export function InteractiveMapPage() {
   });
 
   return (
-    <div className="h-screen relative">
+    <div className="h-dvh relative">
       <div className="w-full h-full overflow-auto">
         <Map 
           highlightedStationId={selectedStationId}
