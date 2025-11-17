@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, Search } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCommandState } from "cmdk";
 
@@ -210,8 +210,10 @@ export function StationSearch({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {selectedStation?.label || "Search for a station..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <div className="flex items-center gap-2">
+            <Search className="h-4 w-4 shrink-0 opacity-50" />
+            {selectedStation?.label || "Search for a station..."}
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
