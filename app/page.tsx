@@ -7,6 +7,7 @@ import { stations } from "@/entities/map";
 import { StationSearch } from "@/features/station-search";
 import { useKeyboardShortcut } from "@/shared/hooks/use-keyboard-shortcut";
 import { GithubLink } from "@/shared/ui/github-link";
+import { Card } from "@/shared/ui/card";
 
 export default function Home() {
   const [selectedStationId, setSelectedStationId] = React.useState<
@@ -83,7 +84,7 @@ export default function Home() {
       </div>
       <div className="fixed inset-x-0 bottom-0 z-10 flex justify-center px-4 pb-4 pointer-events-none">
         <div className="w-full max-w-xl pointer-events-auto">
-          <div className="flex items-center gap-3 px-3 py-2">
+          <Card className="flex-row gap-3 bg-background/80 backdrop-blur-sm py-2 px-3">
             <div className="flex-1">
               <StationSearch
                 selectedStationId={selectedStationId}
@@ -91,7 +92,7 @@ export default function Home() {
               />
             </div>
             <GithubLink />
-          </div>
+          </Card>
         </div>
       </div>
     </div>
