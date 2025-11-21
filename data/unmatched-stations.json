@@ -1,0 +1,290 @@
+[
+  {
+    "name": "Edgware Bus Station",
+    "id": "4900ZZLUEGW1",
+    "lat": 51.61366,
+    "lng": -0.27582
+  },
+  {
+    "name": "Shepherd's Bush (Central Line)",
+    "id": "9400ZZLUSBC2",
+    "lat": 51.504363,
+    "lng": -0.217964
+  },
+  {
+    "name": "Heathrow Airport Terminal 4",
+    "id": "HUBHX4",
+    "lat": 51.458837,
+    "lng": -0.446419
+  },
+  {
+    "name": "Heathrow Airport Terminal 5",
+    "id": "HUBHX5",
+    "lat": 51.471569,
+    "lng": -0.489556
+  },
+  {
+    "name": "King's Cross & St Pancras International",
+    "id": "HUBKGX",
+    "lat": 51.531683,
+    "lng": -0.123538
+  },
+  {
+    "name": "Canning Town Bus Station",
+    "id": "4900ZZDLCGT2",
+    "lat": 51.51458,
+    "lng": 0.00814
+  },
+  {
+    "name": "Cutty Sark",
+    "id": "HUBCUT",
+    "lat": 51.481675,
+    "lng": -0.010802
+  },
+  {
+    "name": "Cambridge Heath Station",
+    "id": "4900CAMHTH1",
+    "lat": 51.53238,
+    "lng": -0.05723
+  },
+  {
+    "name": "New Cross Station",
+    "id": "4900NWCRELL1",
+    "lat": 51.47651,
+    "lng": -0.03219
+  },
+  {
+    "name": "St James's Street Station",
+    "id": "4900STJMSST1",
+    "lat": 51.58106,
+    "lng": -0.03316
+  },
+  {
+    "name": "Pensbury Street",
+    "id": "4900WNDSWRD1",
+    "lat": 51.47043,
+    "lng": -0.13841
+  },
+  {
+    "name": "Queen's Park Station (London)",
+    "id": "9100QPRK1",
+    "lat": 51.534043,
+    "lng": -0.205285
+  },
+  {
+    "name": "St James Street Station",
+    "id": "9100STJMSST0",
+    "lat": 51.581229,
+    "lng": -0.032186
+  },
+  {
+    "name": "Addiscombe Tram Stop",
+    "id": "940GZZCRADD",
+    "lat": 51.37981,
+    "lng": -0.073242
+  },
+  {
+    "name": "Addington Village Tram Stop",
+    "id": "940GZZCRADV",
+    "lat": 51.356241,
+    "lng": -0.032694
+  },
+  {
+    "name": "Ampere Way Tram Stop",
+    "id": "940GZZCRAMP",
+    "lat": 51.38214,
+    "lng": -0.12344
+  },
+  {
+    "name": "Arena Tram Stop",
+    "id": "940GZZCRARA",
+    "lat": 51.391525,
+    "lng": -0.058347
+  },
+  {
+    "name": "Avenue Road Tram Stop",
+    "id": "940GZZCRAVE",
+    "lat": 51.4068,
+    "lng": -0.049476
+  },
+  {
+    "name": "Beddington Lane Tram Stop",
+    "id": "940GZZCRBED",
+    "lat": 51.389242,
+    "lng": -0.142167
+  },
+  {
+    "name": "Beckenham Junction Tram Stop",
+    "id": "940GZZCRBEK",
+    "lat": 51.41073,
+    "lng": -0.026401
+  },
+  {
+    "name": "Belgrave Walk Tram Stop",
+    "id": "940GZZCRBGV",
+    "lat": 51.4011,
+    "lng": -0.17774
+  },
+  {
+    "name": "Birkbeck Tram Stop",
+    "id": "940GZZCRBIR",
+    "lat": 51.403767,
+    "lng": -0.055787
+  },
+  {
+    "name": "Blackhorse Lane Tram Stop",
+    "id": "940GZZCRBLA",
+    "lat": 51.384757,
+    "lng": -0.070562
+  },
+  {
+    "name": "Beckenham Road Tram Stop",
+    "id": "940GZZCRBRD",
+    "lat": 51.409532,
+    "lng": -0.043421
+  },
+  {
+    "name": "George Street Tram Stop",
+    "id": "940GZZCRCEN",
+    "lat": 51.373977,
+    "lng": -0.098746
+  },
+  {
+    "name": "Coombe Lane Tram Stop",
+    "id": "940GZZCRCOO",
+    "lat": 51.359791,
+    "lng": -0.05956
+  },
+  {
+    "name": "Tamworth Road / Centrale Tram Stop",
+    "id": "4900ZZCRCTR",
+    "lat": 51.37593,
+    "lng": -0.10361
+  },
+  {
+    "name": "Dundonald Road Tram Stop",
+    "id": "940GZZCRDDR",
+    "lat": 51.417555,
+    "lng": -0.207679
+  },
+  {
+    "name": "East Croydon Tram Stop",
+    "id": "940GZZCRECR",
+    "lat": 51.374863,
+    "lng": -0.092416
+  },
+  {
+    "name": "Elmers End Tram Stop",
+    "id": "940GZZCRELM",
+    "lat": 51.398474,
+    "lng": -0.049557
+  },
+  {
+    "name": "Fieldway Tram Stop",
+    "id": "940GZZCRFLD",
+    "lat": 51.351305,
+    "lng": -0.024245
+  },
+  {
+    "name": "Gravel Hill Tram Stop",
+    "id": "940GZZCRGRA",
+    "lat": 51.354545,
+    "lng": -0.04315
+  },
+  {
+    "name": "Harrington Road Tram Stop",
+    "id": "940GZZCRHAR",
+    "lat": 51.399793,
+    "lng": -0.060729
+  },
+  {
+    "name": "King Henry's Drive Tram Stop",
+    "id": "940GZZCRKGH",
+    "lat": 51.345082,
+    "lng": -0.019975
+  },
+  {
+    "name": "Lebanon Road Tram Stop",
+    "id": "940GZZCRLEB",
+    "lat": 51.375201,
+    "lng": -0.085002
+  },
+  {
+    "name": "Lloyd Park Tram Stop",
+    "id": "940GZZCRLOY",
+    "lat": 51.364278,
+    "lng": -0.080775
+  },
+  {
+    "name": "Mitcham Tram Stop",
+    "id": "940GZZCRMCH",
+    "lat": 51.39749,
+    "lng": -0.1709
+  },
+  {
+    "name": "Merton Park Tram Stop",
+    "id": "940GZZCRMTP",
+    "lat": 51.413589,
+    "lng": -0.201219
+  },
+  {
+    "name": "New Addington Tram Stop",
+    "id": "940GZZCRNWA",
+    "lat": 51.342593,
+    "lng": -0.017412
+  },
+  {
+    "name": "Phipps Bridge Tram Stop",
+    "id": "940GZZCRPHI",
+    "lat": 51.403979,
+    "lng": -0.18164
+  },
+  {
+    "name": "Reeves Corner Tram Stop",
+    "id": "940GZZCRRVC",
+    "lat": 51.375279,
+    "lng": -0.106408
+  },
+  {
+    "name": "Sandilands Tram Stop",
+    "id": "940GZZCRSAN",
+    "lat": 51.375024,
+    "lng": -0.078041
+  },
+  {
+    "name": "Therapia Lane Tram Stop",
+    "id": "940GZZCRTPA",
+    "lat": 51.385697,
+    "lng": -0.129045
+  },
+  {
+    "name": "Wellesley Road Tram Stop",
+    "id": "940GZZCRWEL",
+    "lat": 51.37537,
+    "lng": -0.097554
+  },
+  {
+    "name": "Centrale Tram Stop",
+    "id": "940GZZCRCTR",
+    "lat": 51.375769,
+    "lng": -0.103917
+  },
+  {
+    "name": "Mitcham Junction Tram Stop",
+    "id": "940GZZCRMJT",
+    "lat": 51.392868,
+    "lng": -0.158263
+  },
+  {
+    "name": "Waddon Marsh Tram Stop",
+    "id": "940GZZCRWAD",
+    "lat": 51.377076,
+    "lng": -0.118016
+  },
+  {
+    "name": "Wandle Park Tram Stop",
+    "id": "940GZZCRWAN",
+    "lat": 51.373403,
+    "lng": -0.113282
+  }
+]

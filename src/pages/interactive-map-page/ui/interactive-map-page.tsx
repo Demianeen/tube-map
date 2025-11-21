@@ -5,14 +5,89 @@ import * as React from "react";
 import { Map } from "@/entities/map";
 import { stations } from "@/entities/map";
 import { StationSearch } from "@/features/station-search";
+import { useNearestStation, LocateButton, NearestStationIndicator, LocationError } from "@/features/location";
 import { useKeyboardShortcut } from "@/shared/hooks/use-keyboard-shortcut";
 import { GithubLink } from "@/shared/ui/github-link";
 import { Card } from "@/shared/ui/card";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+function GeoTest() {
+  const [position, setPosition] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!("geolocation" in navigator)) {
+      setError("Geolocation is not available in this browser");
+      return;
+    }
+    navigator.permissions.query({ name: "geolocation" }).then(res => console.warn(res.state));
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setPosition({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      },
+      (err) => {
+        // log full error for debugging
+        console.error("Geo error", err);
+        setError(`${err.code}: ${err.message}`);
+      }
+    );
+  }, []);
+
+  return (
+    <div>
+      <h1>Geo test</h1>
+      {position && (
+        <p>
+          {position.lat}, {position.lng}
+        </p>
+      )}
+      {error && <p>Error: {error}</p>}
+    </div>
+  );
+}
+
+export default GeoTest;
+
 
 export function InteractiveMapPage() {
-  const [selectedStationId, setSelectedStationId] = React.useState<
+  const [selectedStationId, setSelectedStationId] = useState<
     string | null
   >(null);
+  
+  const { nearestStation, status, error, locate, clear } = useNearestStation();
+  const lastNearestStationRef = useRef<string | null>(null);
+
+  // Update selected station when nearest station is found
+  useEffect(() => {
+    if (nearestStation && status === "success" && nearestStation.stationId !== lastNearestStationRef.current) {
+      lastNearestStationRef.current = nearestStation.stationId;
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setSelectedStationId(nearestStation.stationId);
+      }, 0);
+    }
+  }, [nearestStation, status]);
+
+  // Derive UI state from hook state
+  const showNearestStation = status === "success" && nearestStation !== null;
+  const showError = status === "error" && error !== null;
+
+  const handleLocate = useCallback(() => {
+    locate();
+  }, [locate]);
+
+  const handleDismissNearestStation = useCallback(() => {
+    clear();
+    setSelectedStationId(null);
+  }, [clear]);
+
+  const handleDismissError = useCallback(() => {
+    clear();
+  }, [clear]);
 
   // unselect on esc
   useKeyboardShortcut({
@@ -82,7 +157,7 @@ export function InteractiveMapPage() {
           onUnselect={() => setSelectedStationId(null)}
         />
       </div>
-      <div className="fixed inset-x-0 bottom-0 z-10 flex justify-center px-4 pb-4 pointer-events-none">
+      <div className="fixed inset-x-0 top-2 z-10 flex flex-col items-center gap-2 px-4 pb-4 pointer-events-none">
         <div className="w-full max-w-xl pointer-events-auto">
           <Card className="flex-row gap-3 bg-background/80 backdrop-blur-sm py-2 px-3">
             <div className="flex-1">
@@ -91,9 +166,31 @@ export function InteractiveMapPage() {
                 onStationSelect={setSelectedStationId}
               />
             </div>
+            <LocateButton
+              onClick={handleLocate}
+              isLoading={status === "locating"}
+            />
             <GithubLink />
           </Card>
         </div>
+        {showNearestStation && nearestStation && (
+          <div className="w-full max-w-xl pointer-events-auto">
+            <NearestStationIndicator
+              stationId={nearestStation.stationId}
+              distance={nearestStation.distance}
+              onDismiss={handleDismissNearestStation}
+            />
+          </div>
+        )}
+        {showError && error && (
+          <div className="w-full max-w-xl pointer-events-auto">
+            <LocationError
+              error={error}
+              onDismiss={handleDismissError}
+            />
+          </div>
+        )}
+        <GeoTest />
       </div>
     </div>
   );

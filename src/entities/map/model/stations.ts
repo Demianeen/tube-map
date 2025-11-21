@@ -332,7 +332,6 @@ export const stations: Station[] = [
   { value: "Plaistow_hnc", label: "Plaistow Hnc" },
   { value: "Pontoon_Dock", label: "Pontoon Dock" },
   { value: "Poplar", label: "Poplar" },
-  { value: "Portobello_Central", label: "Portobello Central" },
   { value: "Preston_Road", label: "Preston Road" },
   { value: "Prince_Regent", label: "Prince Regent" },
   { value: "Pudding_Mill_Lane", label: "Pudding Mill Lane" },

@@ -3453,8 +3453,7 @@ text {font-family:Arimo,Liberation Sans,Helvetica,Arial,sans-serif}
 				<use xlink:href="#intnr" x="294.667" y="723.9" id="West_Ealing"/>
 			</g>
 			<use xlink:href="#stelizabeth" transform="translate(460,723.9)rotate(90)" id="Acton_Main_Line"/>
-			<use xlink:href="#intnrx" x="610" y="638.9" id="Old_Oak_Common"/><!--
-			<use xlink:href="#stelizabeth" transform="translate(4000,4000)rotate(270)" id="Portobello_Central"/>-->
+			<use xlink:href="#intnrx" x="610" y="638.9" id="Old_Oak_Common"/>
 			<g>
 				<title>Abbey Wood Elizabeth line-National Rail station</title>
 				<use xlink:href="#intnr" x="2353.33" y="704" id="Abbey_Wood"/>
