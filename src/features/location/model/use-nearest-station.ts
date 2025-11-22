@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { stationGeo, getStationGeo } from "@/entities/map/model/station-geo";
+import posthog from "posthog-js";
 
 export type NearestStationStatus = "idle" | "locating" | "success" | "error";
 
@@ -148,11 +149,16 @@ export function useNearestStation() {
 
     if (!navigator.geolocation) {
       console.error("[useNearestStation] Geolocation not supported");
+      const errorMessage = "Geolocation is not supported by your browser";
       setResult({
         stationId: null,
         distance: null,
         status: "error",
-        error: "Geolocation is not supported by your browser",
+        error: errorMessage,
+      });
+      posthog.capture("nearest_station_location_failed", {
+        reason: "geolocation_not_supported",
+        error_message: errorMessage,
       });
       return;
     }
@@ -192,6 +198,10 @@ export function useNearestStation() {
             status: "error",
             error: "Location data is too old",
           });
+          posthog.capture("nearest_station_location_failed", {
+            reason: "position_too_old",
+            position_age_ms: positionAge,
+          });
           return;
         }
 
@@ -206,6 +216,9 @@ export function useNearestStation() {
             status: "error",
             error: "No stations with coordinates available",
           });
+          posthog.capture("nearest_station_location_failed", {
+            reason: "no_stations_found",
+          });
           return;
         }
 
@@ -215,6 +228,12 @@ export function useNearestStation() {
           distance: nearest.distance,
           status: "success",
           error: null,
+        });
+        posthog.capture("nearest_station_location_success", {
+          station_id: nearest.stationId,
+          distance_meters: nearest.distance,
+          user_accuracy_meters: accuracy,
+          position_age_ms: positionAge,
         });
       },
       (error) => {
@@ -262,6 +281,11 @@ export function useNearestStation() {
           distance: null,
           status: "error",
           error: errorMessage,
+        });
+        posthog.capture("nearest_station_location_failed", {
+          reason: "geolocation_api_error",
+          error_code: error.code,
+          error_message: errorMessage,
         });
       },
       {

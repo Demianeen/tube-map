@@ -5,6 +5,7 @@ import { Check, Search } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCommandState } from "cmdk";
 import Fuse from "fuse.js";
+import posthog from "posthog-js";
 
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -265,6 +266,13 @@ export function StationSearch({
   const handleStationSelect = React.useCallback(
     (stationId: string | null) => {
       if (stationId) {
+        const station = stations.find((s) => s.value === stationId);
+        posthog.capture("station_selected", {
+          station_id: stationId,
+          station_name: station?.label,
+          search_query: inputRef.current?.value,
+        });
+
         setStationUsage((prev) => {
           const now = Date.now();
           const existing = prev[stationId];
@@ -292,12 +300,17 @@ export function StationSearch({
 
           return next;
         });
+      } else {
+        posthog.capture("station_cleared", {
+          cleared_station_id: selectedStationId,
+          cleared_station_name: selectedStation?.label,
+        });
       }
 
       onStationSelect(stationId);
       setOpen(false);
     },
-    [onStationSelect],
+    [onStationSelect, selectedStationId, selectedStation],
   );
 
   return (

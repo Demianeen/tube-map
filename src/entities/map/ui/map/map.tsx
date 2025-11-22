@@ -1,5 +1,6 @@
 "use client";
 
+import posthog from "posthog-js";
 import Map from "@/shared/assets/map/map.svg";
 import { StationHighlight } from "./station-highlight";
 

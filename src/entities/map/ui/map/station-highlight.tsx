@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import posthog from "posthog-js";
 import { getStationCenter } from "../../model/station-center";
 
 interface StationHighlightProps {
@@ -86,6 +87,10 @@ export function StationHighlight({
       }
       return;
     }
+
+    posthog.capture("station-highlighted", {
+      station_id: highlightedStationId,
+    });
 
     // Highlight the selected station
     highlightStationElement(svg, stationElement);

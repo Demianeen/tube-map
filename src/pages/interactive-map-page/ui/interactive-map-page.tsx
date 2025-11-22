@@ -1,5 +1,6 @@
 "use client";
 
+import posthog from 'posthog-js';
 import { Map } from "@/entities/map";
 import { stations } from "@/entities/map";
 import { StationSearch } from "@/features/station-search";
@@ -15,10 +16,29 @@ export function InteractiveMapPage() {
   );
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const handleStationSelectFromSearch = (stationId: string | null) => {
+    if (stationId) {
+      posthog.capture('station_selected', { station_id: stationId, source: 'search' });
+    }
+    setSelectedStationId(stationId);
+  };
+
+  const handleUnselectFromMap = () => {
+    if (selectedStationId) {
+      posthog.capture('station_deselected', { method: 'map_interaction', deselected_station_id: selectedStationId });
+    }
+    setSelectedStationId(null);
+  };
+
   // unselect on esc
   useKeyboardShortcut({
     key: "Escape",
-    onPress: () => setSelectedStationId(null),
+    onPress: () => {
+      if (selectedStationId) {
+        posthog.capture('station_deselected', { method: 'keyboard', deselected_station_id: selectedStationId });
+      }
+      setSelectedStationId(null)
+    },
   });
 
   // navigate to previous station with left arrow
@@ -27,9 +47,10 @@ export function InteractiveMapPage() {
     onPress: () => {
       if (stations.length === 0) return;
 
+      let newStationId: string;
       if (selectedStationId === null) {
         // If no station selected, go to the last one
-        setSelectedStationId(stations[stations.length - 1].value);
+        newStationId = stations[stations.length - 1].value;
       } else {
         // Find current index and go to previous (wrap to last if at start)
         const currentIndex = stations.findIndex(
@@ -37,13 +58,15 @@ export function InteractiveMapPage() {
         );
         if (currentIndex === -1) {
           // Current selection not found, go to last station
-          setSelectedStationId(stations[stations.length - 1].value);
+          newStationId = stations[stations.length - 1].value;
         } else {
           const prevIndex =
             currentIndex === 0 ? stations.length - 1 : currentIndex - 1;
-          setSelectedStationId(stations[prevIndex].value);
+          newStationId = stations[prevIndex].value;
         }
       }
+      posthog.capture('station_selected', { station_id: newStationId, source: 'keyboard_previous' });
+      setSelectedStationId(newStationId);
     },
     ignoreInputFields: true,
   });
@@ -54,9 +77,10 @@ export function InteractiveMapPage() {
     onPress: () => {
       if (stations.length === 0) return;
 
+      let newStationId: string;
       if (selectedStationId === null) {
         // If no station selected, go to the first one
-        setSelectedStationId(stations[0].value);
+        newStationId = stations[0].value;
       } else {
         // Find current index and go to next (wrap to first if at end)
         const currentIndex = stations.findIndex(
@@ -64,13 +88,15 @@ export function InteractiveMapPage() {
         );
         if (currentIndex === -1) {
           // Current selection not found, go to first station
-          setSelectedStationId(stations[0].value);
+          newStationId = stations[0].value;
         } else {
           const nextIndex =
             currentIndex === stations.length - 1 ? 0 : currentIndex + 1;
-          setSelectedStationId(stations[nextIndex].value);
+          newStationId = stations[nextIndex].value;
         }
       }
+      posthog.capture('station_selected', { station_id: newStationId, source: 'keyboard_next' });
+      setSelectedStationId(newStationId);
     },
     ignoreInputFields: true,
   });
@@ -81,7 +107,7 @@ export function InteractiveMapPage() {
         <Map
           mapContainerRef={mapContainerRef}
           highlightedStationId={selectedStationId}
-          onUnselect={() => setSelectedStationId(null)}
+          onUnselect={handleUnselectFromMap}
         />
         <NearestStationMarker mapContainerRef={mapContainerRef} />
       </div>
@@ -91,7 +117,7 @@ export function InteractiveMapPage() {
             <div className="flex-1">
               <StationSearch
                 selectedStationId={selectedStationId}
-                onStationSelect={setSelectedStationId}
+                onStationSelect={handleStationSelectFromSearch}
               />
             </div>
             <GithubLink />
