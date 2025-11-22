@@ -168,3 +168,36 @@
   }
 }
 
+/* Nearest station marker styles */
+#nearest-station-wrapper {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#nearest-station-pin {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+#nearest-station-pulse {
+  animation: nearestStationPulse 2s linear infinite;
+}
+
+#nearest-station-wrapper.visible {
+  visibility: visible;
+}
+
+@keyframes nearestStationPulse {
+  0% {
+    opacity: 0.6;
+    r: 6;
+  }
+  50% {
+    opacity: 0.3;
+    r: 12;
+  }
+  100% {
+    opacity: 0;
+    r: 18;
+  }
+}
+
