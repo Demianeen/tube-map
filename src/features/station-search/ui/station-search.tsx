@@ -19,7 +19,43 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { stations } from "@/entities/map";
 import { useRef, useEffect, useMemo } from "react";
+import type { Station } from "@/entities/map/model/stations";
 import { useKeyboardShortcut } from "@/shared/hooks/use-keyboard-shortcut";
+
+type StationUsage = {
+  count: number;
+  lastUsed: number;
+};
+
+const STATION_USAGE_KEY = "tube-map/station-usage";
+
+function sortStationsByUsage(
+  list: Station[],
+  stationUsage: Record<string, StationUsage>,
+): Station[] {
+  if (!stationUsage || Object.keys(stationUsage).length === 0) {
+    return list;
+  }
+
+  return [...list].sort((a, b) => {
+    const usageA = stationUsage[a.value];
+    const usageB = stationUsage[b.value];
+
+    // If neither has usage data, keep original relative order
+    if (!usageA && !usageB) return 0;
+    // Items with usage data come before those without
+    if (!usageA) return 1;
+    if (!usageB) return -1;
+
+    // Higher count first
+    if (usageA.count !== usageB.count) {
+      return usageB.count - usageA.count;
+    }
+
+    // More recent lastUsed first
+    return usageB.lastUsed - usageA.lastUsed;
+  });
+}
 
 interface StationSearchProps {
   selectedStationId: string | null;
@@ -30,10 +66,12 @@ function VirtualizedStationList({
   selectedStationId,
   onStationSelect,
   open,
+  stationUsage,
 }: {
   selectedStationId: string | null;
   onStationSelect: (stationId: string | null) => void;
   open: boolean;
+  stationUsage: Record<string, StationUsage>;
 }) {
   const listRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLElement | null>(null);
@@ -56,12 +94,16 @@ function VirtualizedStationList({
     [],
   );
 
-  // Get filtered stations based on fuzzy search
+  // Get filtered stations based on fuzzy search, sorted by usage (frecency)
   const filteredStations = useMemo(() => {
-    if (!cmdkSearch.trim()) return stations;
+    if (!cmdkSearch.trim()) {
+      return sortStationsByUsage(stations, stationUsage);
+    }
+
     const results = fuse.search(cmdkSearch);
-    return results.map((result) => result.item);
-  }, [cmdkSearch, fuse]);
+    const matched = results.map((result) => result.item as Station);
+    return sortStationsByUsage(matched, stationUsage);
+  }, [cmdkSearch, fuse, stationUsage]);
 
 
   // Callback ref to find and store the scroll container
@@ -178,6 +220,9 @@ export function StationSearch({
   onStationSelect,
 }: StationSearchProps) {
   const [open, setOpen] = React.useState(false);
+  const [stationUsage, setStationUsage] = React.useState<
+    Record<string, StationUsage>
+  >({});
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Focus search on "/" keypress
@@ -199,12 +244,57 @@ export function StationSearch({
     }
   }, [open]);
 
+  // Load station usage from localStorage on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.localStorage.getItem(STATION_USAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as Record<string, StationUsage> | null;
+      if (parsed && typeof parsed === "object") {
+        setStationUsage(parsed);
+      }
+    } catch (error) {
+      console.error("[StationSearch] Failed to load station usage", error);
+    }
+  }, []);
+
   const selectedStation = stations.find(
     (station) => station.value === selectedStationId,
   );
 
   const handleStationSelect = React.useCallback(
     (stationId: string | null) => {
+      if (stationId) {
+        setStationUsage((prev) => {
+          const now = Date.now();
+          const existing = prev[stationId];
+          const next: Record<string, StationUsage> = {
+            ...prev,
+            [stationId]: {
+              count: (existing?.count ?? 0) + 1,
+              lastUsed: now,
+            },
+          };
+
+          if (typeof window !== "undefined") {
+            try {
+              window.localStorage.setItem(
+                STATION_USAGE_KEY,
+                JSON.stringify(next),
+              );
+            } catch (error) {
+              console.error(
+                "[StationSearch] Failed to persist station usage",
+                error,
+              );
+            }
+          }
+
+          return next;
+        });
+      }
+
       onStationSelect(stationId);
       setOpen(false);
     },
@@ -234,6 +324,7 @@ export function StationSearch({
               selectedStationId={selectedStationId}
               onStationSelect={handleStationSelect}
               open={open}
+              stationUsage={stationUsage}
             />
           </CommandList>
         </Command>
