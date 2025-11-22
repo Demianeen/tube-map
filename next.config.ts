@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import type { webpack } from "webpack";
 import withSerwistInit from "@serwist/next";
 
 const withSerwist = withSerwistInit({

@@ -16,6 +16,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "London Tube Map",
   description: "London Tube Map with some quality of life features",
+  appleWebApp: {
+    title: "London Tube Map",
+    capable: true,
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({

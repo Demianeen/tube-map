@@ -6,9 +6,9 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Tube Map",
     description: "London Tube Map with some quality of life features",
     start_url: "/",
-    display: "standalone",
-    background_color: "#ffffff",
     theme_color: "#000000",
+    background_color: "#ffffff",
+    display: "standalone",
     icons: [
       {
         src: "/icon-192x192.png",
@@ -22,6 +22,19 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/png",
       },
     ],
+    screenshots: [
+      {
+        src: "/screenshot-wide.png",
+        sizes: "3840x2160",
+        type: "image/png",
+        form_factor: "wide",
+      },
+      {
+        src: "/screenshot-narrow.png",
+        sizes: "800x1734",
+        type: "image/png",
+        form_factor: "narrow",
+      },
+    ],
   };
 }
-
