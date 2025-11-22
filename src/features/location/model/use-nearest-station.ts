@@ -44,11 +44,17 @@ function findNearestStation(
   userLng: number,
 ): { stationId: string; distance: number } | null {
   const stationsWithGeo = Object.keys(stationGeo);
-  
+
   console.log("[findNearestStation] Starting search...");
-  console.log("[findNearestStation] User location:", { lat: userLat, lng: userLng });
-  console.log("[findNearestStation] Stations with geo data:", stationsWithGeo.length);
-  
+  console.log("[findNearestStation] User location:", {
+    lat: userLat,
+    lng: userLng,
+  });
+  console.log(
+    "[findNearestStation] Stations with geo data:",
+    stationsWithGeo.length,
+  );
+
   if (stationsWithGeo.length === 0) {
     console.warn("[findNearestStation] No stations with geo data available!");
     return null;
@@ -61,13 +67,15 @@ function findNearestStation(
   for (const stationId of stationsWithGeo) {
     const geo = getStationGeo(stationId);
     if (!geo) {
-      console.warn(`[findNearestStation] No geo data for station: ${stationId}`);
+      console.warn(
+        `[findNearestStation] No geo data for station: ${stationId}`,
+      );
       continue;
     }
 
     const distance = haversineDistance(userLat, userLng, geo.lat, geo.lng);
     distances.push({ stationId, distance });
-    
+
     if (distance < nearestDistance) {
       nearestDistance = distance;
       nearestStationId = stationId;
@@ -75,11 +83,15 @@ function findNearestStation(
   }
 
   // Log top 5 closest stations for debugging
-  const sortedDistances = distances.sort((a, b) => a.distance - b.distance).slice(0, 5);
+  const sortedDistances = distances
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, 5);
   console.log("[findNearestStation] Top 5 closest stations:", sortedDistances);
 
   if (nearestStationId === null) {
-    console.error("[findNearestStation] No nearest station found (all stations skipped?)");
+    console.error(
+      "[findNearestStation] No nearest station found (all stations skipped?)",
+    );
     return null;
   }
 
@@ -97,14 +109,14 @@ function findNearestStation(
 
 /**
  * Hook to find the nearest station to the user's current location.
- * 
+ *
  * Usage:
  * ```tsx
  * const { nearestStation, locate, status, error } = useNearestStation();
- * 
+ *
  * // Trigger location request
  * locate();
- * 
+ *
  * // Access result
  * if (nearestStation) {
  *   console.log(`Nearest station: ${nearestStation.stationId}, ${nearestStation.distance}m away`);
@@ -133,7 +145,7 @@ export function useNearestStation() {
 
   const locate = useCallback(async () => {
     console.log("[useNearestStation] locate() called");
-    
+
     if (!navigator.geolocation) {
       console.error("[useNearestStation] Geolocation not supported");
       setResult({
@@ -146,7 +158,9 @@ export function useNearestStation() {
     }
 
     console.log("[useNearestStation] Requesting location...");
-    console.log("[useNearestStation] Note: Browser will prompt for location permission if not already granted");
+    console.log(
+      "[useNearestStation] Note: Browser will prompt for location permission if not already granted",
+    );
     setResult((prev) => ({
       ...prev,
       status: "locating",
@@ -162,11 +176,14 @@ export function useNearestStation() {
           accuracy: accuracy ? `${Math.round(accuracy)}m` : "unknown",
           timestamp: new Date(position.timestamp).toISOString(),
         });
-        
+
         // Check if position is reasonably fresh (within 30 seconds)
         const positionAge = Date.now() - position.timestamp;
-        console.log("[useNearestStation] Position age:", `${Math.round(positionAge / 1000)}s`);
-        
+        console.log(
+          "[useNearestStation] Position age:",
+          `${Math.round(positionAge / 1000)}s`,
+        );
+
         if (positionAge > 30000) {
           console.warn("[useNearestStation] Position too old:", positionAge);
           setResult({
@@ -180,7 +197,7 @@ export function useNearestStation() {
 
         console.log("[useNearestStation] Searching for nearest station...");
         const nearest = findNearestStation(latitude, longitude);
-        
+
         if (!nearest) {
           console.error("[useNearestStation] No nearest station found");
           setResult({
@@ -208,15 +225,22 @@ export function useNearestStation() {
           POSITION_UNAVAILABLE: error.POSITION_UNAVAILABLE,
           TIMEOUT: error.TIMEOUT,
         });
-        
+
         let errorMessage = "Failed to get location";
-        
+
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = "Location permission denied. Please check your browser settings and allow location access for this site, then try again.";
-            console.error("[useNearestStation] Permission denied - User needs to grant location permission");
-            console.error("[useNearestStation] To fix: Chrome/Edge -> Settings -> Privacy -> Site Settings -> Location -> Allow localhost:3000");
-            console.error("[useNearestStation] Or reset permissions: Click the lock icon in address bar -> Site settings -> Reset permissions");
+            errorMessage =
+              "Location permission denied. Please check your browser settings and allow location access for this site, then try again.";
+            console.error(
+              "[useNearestStation] Permission denied - User needs to grant location permission",
+            );
+            console.error(
+              "[useNearestStation] To fix: Chrome/Edge -> Settings -> Privacy -> Site Settings -> Location -> Allow localhost:3000",
+            );
+            console.error(
+              "[useNearestStation] Or reset permissions: Click the lock icon in address bar -> Site settings -> Reset permissions",
+            );
             break;
           case error.POSITION_UNAVAILABLE:
             errorMessage = "Location information unavailable";
@@ -227,7 +251,10 @@ export function useNearestStation() {
             console.error("[useNearestStation] Timeout");
             break;
           default:
-            console.error("[useNearestStation] Unknown error code:", error.code);
+            console.error(
+              "[useNearestStation] Unknown error code:",
+              error.code,
+            );
         }
 
         setResult({
@@ -250,7 +277,7 @@ export function useNearestStation() {
       navigator.geolocation.clearWatch(watchIdRef.current);
       watchIdRef.current = null;
     }
-    
+
     setResult({
       stationId: null,
       distance: null,
@@ -260,18 +287,16 @@ export function useNearestStation() {
   }, []);
 
   return {
-    nearestStation: result.status === "success" && result.stationId
-      ? {
-          stationId: result.stationId,
-          distance: result.distance!,
-        }
-      : null,
+    nearestStation:
+      result.status === "success" && result.stationId
+        ? {
+            stationId: result.stationId,
+            distance: result.distance!,
+          }
+        : null,
     status: result.status,
     error: result.error,
     locate,
     clear,
   };
 }
-
-
-

@@ -4,7 +4,7 @@
  * - <use> elements with transform attributes
  * - <g> elements (groups)
  * - Any other SVG element
- * 
+ *
  * This utility is used for positioning markers and highlights on the map.
  */
 export function getStationCenter(
@@ -15,9 +15,10 @@ export function getStationCenter(
   // when rotation is involved, which gives incorrect results
   if (element instanceof SVGUseElement) {
     // Get the referenced element to determine its size
-    const href = element.getAttribute("href") || element.getAttribute("xlink:href");
+    const href =
+      element.getAttribute("href") || element.getAttribute("xlink:href");
     let refBBox: DOMRect | null = null;
-    
+
     if (href) {
       const refId = href.replace("#", "");
       const refElement = element.ownerSVGElement?.querySelector(`#${refId}`);
@@ -31,9 +32,11 @@ export function getStationCenter(
     }
 
     // Try x/y attributes first
-    const x = element.x?.baseVal?.value ?? parseFloat(element.getAttribute("x") || "0");
-    const y = element.y?.baseVal?.value ?? parseFloat(element.getAttribute("y") || "0");
-    
+    const x =
+      element.x?.baseVal?.value ?? parseFloat(element.getAttribute("x") || "0");
+    const y =
+      element.y?.baseVal?.value ?? parseFloat(element.getAttribute("y") || "0");
+
     if ((x !== 0 || y !== 0) && !isNaN(x) && !isNaN(y)) {
       // For <use> elements, x/y position the (0,0) point of the referenced element
       // Since referenced elements are centered at (0,0), the center is at (x, y)
@@ -66,7 +69,7 @@ export function getStationCenter(
           // For <use> elements, SVG symbols are typically centered at (0,0)
           // The translate values position the symbol's center, so use them directly
           // Only use refBBox for radius calculation, not for position offset
-          const radius = refBBox 
+          const radius = refBBox
             ? Math.max(refBBox.width, refBBox.height) * 0.8 || 8
             : 8;
           return { cx: tx, cy: ty, radius };
@@ -78,7 +81,12 @@ export function getStationCenter(
     // Note: This may give incorrect results if rotation is involved
     try {
       const bbox = element.getBBox();
-      if (bbox.width > 0 && bbox.height > 0 && !isNaN(bbox.x) && !isNaN(bbox.y)) {
+      if (
+        bbox.width > 0 &&
+        bbox.height > 0 &&
+        !isNaN(bbox.x) &&
+        !isNaN(bbox.y)
+      ) {
         const cx = bbox.x + bbox.width / 2;
         const cy = bbox.y + bbox.height / 2;
         const radius = Math.max(bbox.width, bbox.height) * 0.8 || 8;
@@ -97,7 +105,7 @@ export function getStationCenter(
       const cx = bbox.x + bbox.width / 2;
       const cy = bbox.y + bbox.height / 2;
       const radius = Math.max(bbox.width, bbox.height) * 0.8 || 8;
-      
+
       return { cx, cy, radius };
     }
   } catch (e) {
@@ -133,4 +141,3 @@ export function getStationCenter(
 
   return null;
 }
-

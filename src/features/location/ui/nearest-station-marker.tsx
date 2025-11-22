@@ -14,10 +14,12 @@ interface NearestStationMarkerProps {
  * - Automatically locating the user on mount
  * - Finding the nearest station
  * - Displaying the marker on the map
- * 
+ *
  * The marker is separate from the station selection highlight.
  */
-export function NearestStationMarker({ mapContainerRef }: NearestStationMarkerProps) {
+export function NearestStationMarker({
+  mapContainerRef,
+}: NearestStationMarkerProps) {
   const { nearestStation, status, locate } = useNearestStation();
   const hasScrolledToNearestRef = useRef(false);
 
@@ -39,7 +41,9 @@ export function NearestStationMarker({ mapContainerRef }: NearestStationMarkerPr
     const pulse = svg.querySelector<SVGCircleElement>("#nearest-station-pulse");
 
     if (!wrapper || !pin || !pulse) {
-      console.warn("[NearestStationMarker] Could not find marker elements in SVG");
+      console.warn(
+        "[NearestStationMarker] Could not find marker elements in SVG",
+      );
       return;
     }
 
@@ -53,9 +57,13 @@ export function NearestStationMarker({ mapContainerRef }: NearestStationMarkerPr
     }
 
     // Find the station element
-    const stationElement = svg.querySelector<SVGGraphicsElement>(`#${stationId}`);
+    const stationElement = svg.querySelector<SVGGraphicsElement>(
+      `#${stationId}`,
+    );
     if (!stationElement) {
-      console.warn(`[NearestStationMarker] Could not find station element: ${stationId}`);
+      console.warn(
+        `[NearestStationMarker] Could not find station element: ${stationId}`,
+      );
       wrapper.setAttribute("visibility", "hidden");
       wrapper.classList.remove("visible");
       return;
@@ -64,7 +72,9 @@ export function NearestStationMarker({ mapContainerRef }: NearestStationMarkerPr
     // Get the center position of the station
     const center = getStationCenter(stationElement);
     if (!center) {
-      console.warn(`[NearestStationMarker] Could not determine center for station: ${stationId}`);
+      console.warn(
+        `[NearestStationMarker] Could not determine center for station: ${stationId}`,
+      );
       wrapper.setAttribute("visibility", "hidden");
       wrapper.classList.remove("visible");
       return;
@@ -88,4 +98,3 @@ export function NearestStationMarker({ mapContainerRef }: NearestStationMarkerPr
 
   return null;
 }
-

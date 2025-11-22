@@ -10,11 +10,11 @@ import { Card } from "@/shared/ui/card";
 import { useRef, useState } from "react";
 
 export function InteractiveMapPage() {
-  const [selectedStationId, setSelectedStationId] = useState<
-    string | null
-  >(null);
+  const [selectedStationId, setSelectedStationId] = useState<string | null>(
+    null,
+  );
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
-  
+
   // unselect on esc
   useKeyboardShortcut({
     key: "Escape",
@@ -26,7 +26,7 @@ export function InteractiveMapPage() {
     key: "ArrowLeft",
     onPress: () => {
       if (stations.length === 0) return;
-      
+
       if (selectedStationId === null) {
         // If no station selected, go to the last one
         setSelectedStationId(stations[stations.length - 1].value);
@@ -53,7 +53,7 @@ export function InteractiveMapPage() {
     key: "ArrowRight",
     onPress: () => {
       if (stations.length === 0) return;
-      
+
       if (selectedStationId === null) {
         // If no station selected, go to the first one
         setSelectedStationId(stations[0].value);
@@ -101,4 +101,3 @@ export function InteractiveMapPage() {
     </div>
   );
 }
-

@@ -65,7 +65,8 @@ export function useKeyboardShortcut({
         if (
           event.target instanceof HTMLInputElement ||
           event.target instanceof HTMLTextAreaElement ||
-          (event.target instanceof HTMLElement && event.target.isContentEditable)
+          (event.target instanceof HTMLElement &&
+            event.target.isContentEditable)
         ) {
           return;
         }
@@ -83,4 +84,3 @@ export function useKeyboardShortcut({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [key, onPress, preventDefault, ignoreInputFields, enabled]);
 }
-

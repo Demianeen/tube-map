@@ -78,9 +78,9 @@ function VirtualizedStationList({
 
   // Get search value and selected value from cmdk (must be inside Command context)
   const cmdkSearch = useCommandState((state) => state.search);
-  const cmdkSelectedValue = useCommandState(
-    (state) => state.value,
-  ) as string | undefined;
+  const cmdkSelectedValue = useCommandState((state) => state.value) as
+    | string
+    | undefined;
 
   // Initialize Fuse instance for fuzzy search
   const fuse = useMemo(
@@ -104,7 +104,6 @@ function VirtualizedStationList({
     const matched = results.map((result) => result.item as Station);
     return sortStationsByUsage(matched, stationUsage);
   }, [cmdkSearch, fuse, stationUsage]);
-
 
   // Callback ref to find and store the scroll container
   const setListRef = React.useCallback((node: HTMLDivElement | null) => {
@@ -332,4 +331,3 @@ export function StationSearch({
     </Popover>
   );
 }
-

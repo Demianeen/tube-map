@@ -8,7 +8,10 @@ interface StationHighlightProps {
   highlightedStationId: string | null | undefined;
 }
 
-const queryMapElement = (svg: SVGSVGElement, elementId: string): SVGGraphicsElement | null => {
+const queryMapElement = (
+  svg: SVGSVGElement,
+  elementId: string,
+): SVGGraphicsElement | null => {
   return svg.querySelector(`#${elementId}`);
 };
 
@@ -18,21 +21,21 @@ function highlightStationElement(
 ): void {
   const wrapper = queryMapElement(svg, "station-highlight-wrapper");
   const ring = queryMapElement(svg, "station-highlight-ring");
-  
+
   if (!ring || !wrapper) return;
 
   const center = getStationCenter(stationEl);
-  
+
   if (center) {
     // Set the base radius as a CSS custom property
     const clampedRadius = Math.max(6, Math.min(center.radius, 14));
     ring.style.setProperty("--base-radius", String(clampedRadius));
-    
+
     // Calculate end scale to achieve roughly constant pixel growth
     // Target: add ~25 SVG units of radius regardless of station size
     const targetDelta = 25;
     const endScale = 1 + targetDelta / clampedRadius;
-    
+
     ring.style.setProperty("--highlight-scale", String(endScale));
     ring.classList.add("visible");
     wrapper.setAttribute("transform", `translate(${center.cx}, ${center.cy})`);
@@ -50,7 +53,10 @@ function highlightStationElement(
  * - Scrolling to the highlighted station
  * - Hiding the highlight when no station is selected
  */
-export function StationHighlight({ mapContainerRef, highlightedStationId }: StationHighlightProps) {
+export function StationHighlight({
+  mapContainerRef,
+  highlightedStationId,
+}: StationHighlightProps) {
   useEffect(() => {
     const container = mapContainerRef.current;
     if (!container) return;
@@ -72,7 +78,9 @@ export function StationHighlight({ mapContainerRef, highlightedStationId }: Stat
     // Find the station element
     const stationElement = queryMapElement(svg, highlightedStationId);
     if (!stationElement) {
-      console.warn(`[StationHighlight] Could not find station element: ${highlightedStationId}`);
+      console.warn(
+        `[StationHighlight] Could not find station element: ${highlightedStationId}`,
+      );
       if (ring) {
         ring.classList.remove("visible");
       }
@@ -95,4 +103,3 @@ export function StationHighlight({ mapContainerRef, highlightedStationId }: Stat
   // This component doesn't render anything - it just manipulates the SVG
   return null;
 }
-

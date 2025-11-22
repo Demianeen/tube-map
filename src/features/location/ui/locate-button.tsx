@@ -10,7 +10,11 @@ interface LocateButtonProps {
   className?: string;
 }
 
-export function LocateButton({ onClick, isLoading, className }: LocateButtonProps) {
+export function LocateButton({
+  onClick,
+  isLoading,
+  className,
+}: LocateButtonProps) {
   return (
     <Button
       onClick={onClick}
@@ -29,6 +33,3 @@ export function LocateButton({ onClick, isLoading, className }: LocateButtonProp
     </Button>
   );
 }
-
-
-
