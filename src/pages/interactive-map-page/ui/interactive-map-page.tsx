@@ -3,15 +3,17 @@
 import { Map } from "@/entities/map";
 import { stations } from "@/entities/map";
 import { StationSearch } from "@/features/station-search";
+import { NearestStationMarker } from "@/features/location";
 import { useKeyboardShortcut } from "@/shared/hooks/use-keyboard-shortcut";
 import { GithubLink } from "@/shared/ui/github-link";
 import { Card } from "@/shared/ui/card";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export function InteractiveMapPage() {
   const [selectedStationId, setSelectedStationId] = useState<
     string | null
   >(null);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
   
   // unselect on esc
   useKeyboardShortcut({
@@ -76,10 +78,12 @@ export function InteractiveMapPage() {
   return (
     <div className="h-dvh relative">
       <div className="w-full h-full overflow-auto">
-        <Map 
+        <Map
+          mapContainerRef={mapContainerRef}
           highlightedStationId={selectedStationId}
           onUnselect={() => setSelectedStationId(null)}
         />
+        <NearestStationMarker mapContainerRef={mapContainerRef} />
       </div>
       <div className="fixed inset-x-0 top-2 z-10 flex flex-col items-center gap-2 px-4 pb-4 pointer-events-none">
         <div className="w-full max-w-xl pointer-events-auto">
