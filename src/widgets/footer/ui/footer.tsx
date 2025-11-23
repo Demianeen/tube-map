@@ -25,6 +25,7 @@ export function Footer() {
           </Link>
           <span aria-hidden="true">•</span>
           <button
+            type="button"
             onClick={() => openSettings?.()}
             className="hover:text-foreground transition-colors underline-offset-4 hover:underline"
           >
@@ -35,4 +36,3 @@ export function Footer() {
     </footer>
   );
 }
-

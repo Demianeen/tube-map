@@ -9,8 +9,8 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
-  // Configure `pageExtensions` to include markdown and MDX files
-  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  // Configure `pageExtensions` to include MDX files (not plain .md to avoid processing README files)
+  pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -101,7 +101,8 @@ const nextConfig: NextConfig = {
 };
 
 const withMDX = createMDX({
-  // Add markdown plugins here, as desired
+  // Only process .mdx files, not plain .md files
+  extension: /\.mdx$/,
 });
 
 // Merge MDX config with Next.js config, then wrap with Serwist
