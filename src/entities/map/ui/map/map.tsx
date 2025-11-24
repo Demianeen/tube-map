@@ -1,6 +1,5 @@
 "use client";
 
-import posthog from "posthog-js";
 import Map from "@/shared/assets/map/map.svg";
 import { StationHighlight } from "./station-highlight";
 
@@ -18,7 +17,7 @@ export const MapComponent = ({
   return (
     <div
       ref={mapContainerRef}
-      className="w-full h-full overflow-auto"
+      className="w-full h-full"
       onClick={() => {
         if (onUnselect) {
           onUnselect();

@@ -23,4 +23,3 @@ export const PostHogProvider = ({
 
   return <>{children}</>;
 };
-

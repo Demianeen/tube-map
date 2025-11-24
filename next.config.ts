@@ -1,6 +1,5 @@
 import type { NextConfig } from "next";
 import withSerwistInit from "@serwist/next";
-import createMDX from "@next/mdx";
 
 const withSerwist = withSerwistInit({
   swSrc: "app/sw.ts",
@@ -9,8 +8,6 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
-  // Configure `pageExtensions` to include MDX files (not plain .md to avoid processing README files)
-  pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,10 +97,4 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
 };
 
-const withMDX = createMDX({
-  // Only process .mdx files, not plain .md files
-  extension: /\.mdx$/,
-});
-
-// Merge MDX config with Next.js config, then wrap with Serwist
-export default withSerwist(withMDX(nextConfig));
+export default withSerwist(nextConfig);
