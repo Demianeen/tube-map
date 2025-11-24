@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
-import { ServiceWorkerRegistration } from "@/shared/components/service-worker-registration";
+import { ServiceWorkerRegistration } from "@/shared/ui/service-worker-registration";
+import { Footer } from "@/widgets/footer";
+import {
+  COOKIE_CONSENT_KEY,
+  type CookieConsent,
+  readConsentServer,
+  CookieConsentProvider,
+} from "@/shared/providers/cookie-consent";
+import { PostHogProvider } from "@/shared/providers/posthog";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,18 +35,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const rawConsent = cookieStore.get(COOKIE_CONSENT_KEY)?.value;
+  const initialConsent: CookieConsent | null = readConsentServer(rawConsent);
+
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        {children}
-        <ServiceWorkerRegistration />
+        <CookieConsentProvider initialConsent={initialConsent}>
+          <PostHogProvider>
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <ServiceWorkerRegistration />
+          </PostHogProvider>
+        </CookieConsentProvider>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import posthog from 'posthog-js';
+import posthog from "posthog-js";
 import { Map } from "@/entities/map";
 import { stations } from "@/entities/map";
 import { StationSearch } from "@/features/station-search";
@@ -18,14 +18,20 @@ export function InteractiveMapPage() {
 
   const handleStationSelectFromSearch = (stationId: string | null) => {
     if (stationId) {
-      posthog.capture('station_selected', { station_id: stationId, source: 'search' });
+      posthog.capture("station_selected", {
+        station_id: stationId,
+        source: "search",
+      });
     }
     setSelectedStationId(stationId);
   };
 
   const handleUnselectFromMap = () => {
     if (selectedStationId) {
-      posthog.capture('station_deselected', { method: 'map_interaction', deselected_station_id: selectedStationId });
+      posthog.capture("station_deselected", {
+        method: "map_interaction",
+        deselected_station_id: selectedStationId,
+      });
     }
     setSelectedStationId(null);
   };
@@ -35,9 +41,12 @@ export function InteractiveMapPage() {
     key: "Escape",
     onPress: () => {
       if (selectedStationId) {
-        posthog.capture('station_deselected', { method: 'keyboard', deselected_station_id: selectedStationId });
+        posthog.capture("station_deselected", {
+          method: "keyboard",
+          deselected_station_id: selectedStationId,
+        });
       }
-      setSelectedStationId(null)
+      setSelectedStationId(null);
     },
   });
 
@@ -65,7 +74,10 @@ export function InteractiveMapPage() {
           newStationId = stations[prevIndex].value;
         }
       }
-      posthog.capture('station_selected', { station_id: newStationId, source: 'keyboard_previous' });
+      posthog.capture("station_selected", {
+        station_id: newStationId,
+        source: "keyboard_previous",
+      });
       setSelectedStationId(newStationId);
     },
     ignoreInputFields: true,
@@ -95,15 +107,18 @@ export function InteractiveMapPage() {
           newStationId = stations[nextIndex].value;
         }
       }
-      posthog.capture('station_selected', { station_id: newStationId, source: 'keyboard_next' });
+      posthog.capture("station_selected", {
+        station_id: newStationId,
+        source: "keyboard_next",
+      });
       setSelectedStationId(newStationId);
     },
     ignoreInputFields: true,
   });
 
   return (
-    <div className="h-dvh relative">
-      <div className="w-full h-full overflow-auto">
+    <div className="relative">
+      <div className="w-full h-full">
         <Map
           mapContainerRef={mapContainerRef}
           highlightedStationId={selectedStationId}

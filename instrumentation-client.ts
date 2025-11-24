@@ -4,6 +4,7 @@ posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
   api_host: "/relay-Fc5u",
   ui_host: "https://eu.posthog.com",
   defaults: "2025-05-24",
+  cookieless_mode: "on_reject",
   capture_exceptions: true, // This enables capturing exceptions using Error Tracking
   debug: process.env.NODE_ENV === "development",
 });
