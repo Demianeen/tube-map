@@ -1,3 +1,5 @@
+import { DataRequestForm } from "@/features/data-request";
+
 export default function PrivacyPage() {
   return (
     <main className="container mx-auto px-4 py-12 max-w-3xl">
@@ -84,10 +86,13 @@ export default function PrivacyPage() {
 
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">9. Contact</h2>
-        <p>
-          If you have questions or want your data deleted, contact us through
-          the app.
+        <p className="mb-4">
+          If you have questions or want to exercise your rights (access, delete,
+          restrict processing, or withdraw consent), please use the form below.
         </p>
+        <div className="bg-muted/50 rounded-lg border p-6">
+          <DataRequestForm />
+        </div>
       </section>
     </main>
   );
