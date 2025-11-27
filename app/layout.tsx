@@ -52,7 +52,6 @@ export default async function RootLayout({
         <CookieConsentProvider initialConsent={initialConsent}>
           <PostHogProvider>
             <main className="flex-1">{children}</main>
-            <Footer />
             <ServiceWorkerRegistration />
           </PostHogProvider>
         </CookieConsentProvider>

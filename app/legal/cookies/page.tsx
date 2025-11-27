@@ -77,7 +77,7 @@ export default function CookiesPage() {
                   </td>
                   <td className="border border-border px-4 py-2">
                     Used by PostHog to store a pseudonymous analytics ID
-                    ("distinct_id") and session information
+                    (&quot;distinct_id&quot;) and session information
                   </td>
                   <td className="border border-border px-4 py-2">1 year</td>
                 </tr>
