@@ -2,11 +2,8 @@ import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
 const resendClient = new Resend(process.env.RESEND_API_KEY);
-console.log("DATA_REQUEST_TO_EMAIL", process.env.DATA_REQUEST_TO_EMAIL);
 
 export async function POST(request: Request) {
-  console.log("DATA_REQUEST_TO_EMAIL", process.env.DATA_REQUEST_TO_EMAIL);
-
   try {
     const { category, description, userEmail, posthogDistinctId } =
       await request.json();
