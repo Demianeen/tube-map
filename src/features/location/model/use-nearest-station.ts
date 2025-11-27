@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { stationGeo, getStationGeo } from "@/entities/map/model/station-geo";
 import posthog from "posthog-js";
 
@@ -12,6 +12,79 @@ export type NearestStationResult = {
   status: NearestStationStatus;
   error: string | null;
 };
+
+type CachedNearestStation = {
+  stationId: string;
+  distance: number;
+  timestamp: number;
+};
+
+const CACHE_KEY = "tube-map:lastNearestStation";
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+/**
+ * Save the nearest station result to localStorage cache
+ */
+function saveCachedNearestStation(stationId: string, distance: number): void {
+  // localStorage is only available in the browser
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    const cached: CachedNearestStation = {
+      stationId,
+      distance,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+  } catch (error) {
+    // localStorage might be unavailable (e.g., in private browsing)
+    console.debug(
+      "[useNearestStation] Failed to cache nearest station:",
+      error,
+    );
+  }
+}
+
+/**
+ * Get the cached nearest station if it exists and is still valid
+ */
+function getCachedNearestStation(): {
+  stationId: string;
+  distance: number;
+} | null {
+  // localStorage is only available in the browser
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const cachedStr = localStorage.getItem(CACHE_KEY);
+    if (!cachedStr) return null;
+
+    const cached: CachedNearestStation = JSON.parse(cachedStr);
+    const age = Date.now() - cached.timestamp;
+
+    if (age > CACHE_TTL_MS) {
+      // Cache expired, remove it
+      localStorage.removeItem(CACHE_KEY);
+      return null;
+    }
+
+    return {
+      stationId: cached.stationId,
+      distance: cached.distance,
+    };
+  } catch (error) {
+    // Invalid cache data or localStorage unavailable
+    console.debug(
+      "[useNearestStation] Failed to read cached nearest station:",
+      error,
+    );
+    return null;
+  }
+}
 
 /**
  * Calculate the distance between two geographic points using the Haversine formula.
@@ -134,6 +207,9 @@ export function useNearestStation() {
 
   const watchIdRef = useRef<number | null>(null);
 
+  // Get cached nearest station once on mount for immediate use
+  const cachedNearestStation = useMemo(() => getCachedNearestStation(), []);
+
   // Cleanup watch position on unmount
   useEffect(() => {
     return () => {
@@ -229,6 +305,8 @@ export function useNearestStation() {
           status: "success",
           error: null,
         });
+        // Cache the result for faster subsequent loads
+        saveCachedNearestStation(nearest.stationId, nearest.distance);
         posthog.capture("nearest_station_location_success", {
           station_id: nearest.stationId,
           distance_meters: nearest.distance,
@@ -289,9 +367,9 @@ export function useNearestStation() {
         });
       },
       {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 30000, // Accept positions up to 30 seconds old
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 300000, // Accept positions up to 5 minutes old for faster responses
       },
     );
   }, []);
@@ -318,6 +396,7 @@ export function useNearestStation() {
             distance: result.distance!,
           }
         : null,
+    cachedNearestStation, // Expose cached station for immediate use before geolocation completes
     status: result.status,
     error: result.error,
     locate,

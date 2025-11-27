@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useNearestStation } from "../model/use-nearest-station";
 import { getStationCenter } from "@/entities/map/model/station-center";
 
@@ -20,8 +20,12 @@ interface NearestStationMarkerProps {
 export function NearestStationMarker({
   mapContainerRef,
 }: NearestStationMarkerProps) {
-  const { nearestStation, status, locate } = useNearestStation();
+  const { nearestStation, cachedNearestStation, status, locate } =
+    useNearestStation();
   const hasScrolledToNearestRef = useRef(false);
+
+  const effectiveStationId =
+    nearestStation?.stationId ?? cachedNearestStation?.stationId ?? null;
 
   // Automatically locate user on mount
   useEffect(() => {
@@ -29,7 +33,7 @@ export function NearestStationMarker({
   }, [locate]);
 
   // Update marker position when nearest station changes
-  useEffect(() => {
+  useLayoutEffect(() => {
     const container = mapContainerRef.current;
     if (!container) return;
 
@@ -47,10 +51,10 @@ export function NearestStationMarker({
       return;
     }
 
-    const stationId = nearestStation?.stationId ?? null;
+    const stationId = effectiveStationId;
 
-    if (!stationId || status !== "success") {
-      // Hide the marker when no station is found or location is not successful
+    if (!stationId) {
+      // Hide the marker when no station is found
       wrapper.setAttribute("visibility", "hidden");
       wrapper.classList.remove("visible");
       return;
@@ -86,15 +90,16 @@ export function NearestStationMarker({
     wrapper.classList.add("visible");
 
     // Scroll to the nearest station once, when it's first determined
+    // Use cached station for immediate scroll, then update if live result differs
     if (!hasScrolledToNearestRef.current) {
       stationElement.scrollIntoView({
-        behavior: "smooth",
+        behavior: "auto",
         block: "center",
         inline: "center",
       });
       hasScrolledToNearestRef.current = true;
     }
-  }, [mapContainerRef, nearestStation, status]);
+  }, [mapContainerRef, effectiveStationId, nearestStation, status]);
 
   return null;
 }
