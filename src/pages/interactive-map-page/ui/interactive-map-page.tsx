@@ -117,8 +117,8 @@ export function InteractiveMapPage() {
   });
 
   return (
-    <div className="relative">
-      <div className="w-full h-full">
+    <div className="h-dvh relative">
+      <div className="w-full h-full overflow-auto">
         <Map
           mapContainerRef={mapContainerRef}
           highlightedStationId={selectedStationId}

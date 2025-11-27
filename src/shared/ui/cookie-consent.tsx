@@ -113,7 +113,7 @@ export const CookieConsent = ({
                 , you agree to our use of cookies.
               </span>
               <br />
-              <a href="/cookies" className="text-xs underline">
+              <a href="/legal/cookies" className="text-xs underline">
                 Learn more.
               </a>
             </p>
@@ -164,7 +164,7 @@ export const CookieConsent = ({
           <p className="text-xs sm:text-sm text-left text-muted-foreground">
             We use cookies to ensure you get the best experience on our website.
             For more information on how we use cookies, please see our{" "}
-            <Link href="/cookies" className="text-xs underline">
+            <Link href="/legal/cookies" className="text-xs underline">
               cookie policy
             </Link>
             .

@@ -81,6 +81,20 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/privacy",
+        destination: "/legal/privacy",
+        permanent: true,
+      },
+      {
+        source: "/cookies",
+        destination: "/legal/cookies",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
