@@ -4247,10 +4247,6 @@ text {font-family:Arimo,Liberation Sans,Helvetica,Arial,sans-serif}
 	M 90,899 l 5,5 5,-5
 	"
 	/>
-	<g id="title_header" transform="translate(-40,-120)">
-		<path class="ftfl" style="stroke:none" d="M -10,0 L 0,0 v 27 h 982 q 15,0 27,-9 l 12,-9 q 12,-9 27,-9 z"/>
-		<text x="7" y="20" class="b" style="font-size:20px;fill:#fff">Route map of London Underground, London Overground, Docklands Light Railway and Elizabeth line</text>
-	</g>
 <g id="highlight-layer">
 <g id="station-highlight-wrapper" class="station-highlight-wrapper" visibility="hidden">
 <circle id="station-highlight-ring" cx="0" cy="0" r="0"> </circle>

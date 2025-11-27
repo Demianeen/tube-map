@@ -117,7 +117,7 @@ export function InteractiveMapPage() {
   });
 
   return (
-    <div className="h-dvh relative">
+    <div className="h-dvh relative mt-14">
       <div className="w-full h-full overflow-auto">
         <Map
           mapContainerRef={mapContainerRef}
