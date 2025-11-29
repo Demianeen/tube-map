@@ -1,10 +1,9 @@
 "use client";
 
 import posthog from "posthog-js";
-import { Map } from "@/entities/map";
 import { stations } from "@/entities/map";
+import { InteractiveMap } from "@/widgets/interactive-map";
 import { StationSearch } from "@/features/station-search";
-import { NearestStationMarker } from "@/features/location";
 import { useKeyboardShortcut } from "@/shared/hooks/use-keyboard-shortcut";
 import { GithubLink } from "@/shared/ui/github-link";
 import { Card } from "@/shared/ui/card";
@@ -117,14 +116,13 @@ export function InteractiveMapPage() {
   });
 
   return (
-    <div className="h-dvh relative mt-14">
-      <div className="w-full h-full overflow-auto">
-        <Map
+    <div className="h-dvh">
+      <div className="w-full h-full">
+        <InteractiveMap
           mapContainerRef={mapContainerRef}
           highlightedStationId={selectedStationId}
           onUnselect={handleUnselectFromMap}
         />
-        <NearestStationMarker mapContainerRef={mapContainerRef} />
       </div>
       <div className="fixed inset-x-0 top-2 z-10 flex flex-col items-center gap-2 px-4 pb-4 pointer-events-none">
         <div className="w-full max-w-xl pointer-events-auto">

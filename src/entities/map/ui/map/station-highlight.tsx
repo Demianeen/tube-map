@@ -3,18 +3,18 @@
 import { useEffect } from "react";
 import posthog from "posthog-js";
 import { getStationCenter } from "../../model/station-center";
+import {
+  getMapSvg,
+  getStationElement,
+  queryMapElement,
+} from "../../model/map-dom";
 
 interface StationHighlightProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
   highlightedStationId: string | null | undefined;
+  zoomToStation: (stationId: string) => void;
+  isMapReady: boolean;
 }
-
-const queryMapElement = (
-  svg: SVGSVGElement,
-  elementId: string,
-): SVGGraphicsElement | null => {
-  return svg.querySelector(`#${elementId}`);
-};
 
 function highlightStationElement(
   svg: SVGSVGElement,
@@ -57,13 +57,13 @@ function highlightStationElement(
 export function StationHighlight({
   mapContainerRef,
   highlightedStationId,
+  zoomToStation,
+  isMapReady,
 }: StationHighlightProps) {
   useEffect(() => {
-    const container = mapContainerRef.current;
-    if (!container) return;
+    if (!isMapReady) return;
 
-    // Find the SVG element inside the container
-    const svg = container.querySelector<SVGSVGElement>("svg");
+    const svg = getMapSvg(mapContainerRef.current);
     if (!svg) return;
 
     const ring = queryMapElement(svg, "station-highlight-ring");
@@ -77,7 +77,7 @@ export function StationHighlight({
     }
 
     // Find the station element
-    const stationElement = queryMapElement(svg, highlightedStationId);
+    const stationElement = getStationElement(svg, highlightedStationId);
     if (!stationElement) {
       console.warn(
         `[StationHighlight] Could not find station element: ${highlightedStationId}`,
@@ -95,15 +95,9 @@ export function StationHighlight({
     // Highlight the selected station
     highlightStationElement(svg, stationElement);
 
-    // Find and scroll to the station element
-    if (stationElement) {
-      stationElement.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
-      });
-    }
-  }, [mapContainerRef, highlightedStationId]);
+    // Zoom to the station element
+    zoomToStation(highlightedStationId);
+  }, [mapContainerRef, highlightedStationId, zoomToStation, isMapReady]);
 
   // This component doesn't render anything - it just manipulates the SVG
   return null;

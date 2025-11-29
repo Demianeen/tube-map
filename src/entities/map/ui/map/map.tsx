@@ -1,34 +1,23 @@
 "use client";
 
-import Map from "@/shared/assets/map/map.svg";
-import { StationHighlight } from "./station-highlight";
+import MapSvg from "@/shared/assets/map/map.svg";
 
 interface MapComponentProps {
-  highlightedStationId?: string | null;
-  onUnselect?: () => void;
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export const MapComponent = ({
-  highlightedStationId,
-  onUnselect,
-  mapContainerRef,
-}: MapComponentProps) => {
+/**
+ * Base map entity component.
+ *
+ * This component is intentionally \"dumb\": it only renders the SVG map inside
+ * a sized container. All interactive behavior (zooming, panning, markers,
+ * nearest-station logic, etc.) should live in widgets or features that
+ * compose this entity.
+ */
+export const MapComponent = ({ mapContainerRef }: MapComponentProps) => {
   return (
-    <div
-      ref={mapContainerRef}
-      className="w-full h-full"
-      onClick={() => {
-        if (onUnselect) {
-          onUnselect();
-        }
-      }}
-    >
-      <Map />
-      <StationHighlight
-        mapContainerRef={mapContainerRef}
-        highlightedStationId={highlightedStationId}
-      />
+    <div ref={mapContainerRef} className="w-full h-full">
+      <MapSvg />
     </div>
   );
 };
