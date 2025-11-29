@@ -33,6 +33,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-icons": "^5.5.0",
+    "react-zoom-pan-pinch": "^3.7.0",
     "resend": "^6.5.2",
     "serwist": "^9.2.2",
     "tailwind-merge": "^3.4.0"
