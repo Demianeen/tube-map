@@ -2,11 +2,16 @@
 
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useNearestStation } from "../model/use-nearest-station";
-import { getStationCenter } from "@/entities/map/model/station-center";
+import {
+  getMapSvg,
+  getStationElement,
+  queryMapElement,
+  getStationCenter,
+} from "@/entities/map";
 
 interface NearestStationMarkerProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
-  zoomToStation?: (stationId: string) => void;
+  zoomToStation: (stationId: string) => void;
 }
 
 /**
@@ -36,15 +41,21 @@ export function NearestStationMarker({
 
   // Update marker position when nearest station changes
   useLayoutEffect(() => {
-    const container = mapContainerRef.current;
-    if (!container) return;
-
-    const svg = container.querySelector<SVGSVGElement>("svg");
+    const svg = getMapSvg(mapContainerRef.current);
     if (!svg) return;
 
-    const wrapper = svg.querySelector<SVGGElement>("#nearest-station-wrapper");
-    const pin = svg.querySelector<SVGCircleElement>("#nearest-station-pin");
-    const pulse = svg.querySelector<SVGCircleElement>("#nearest-station-pulse");
+    const wrapper = queryMapElement(
+      svg,
+      "nearest-station-wrapper",
+    ) as SVGGElement | null;
+    const pin = queryMapElement(
+      svg,
+      "nearest-station-pin",
+    ) as SVGCircleElement | null;
+    const pulse = queryMapElement(
+      svg,
+      "nearest-station-pulse",
+    ) as SVGCircleElement | null;
 
     if (!wrapper || !pin || !pulse) {
       console.warn(
@@ -63,9 +74,7 @@ export function NearestStationMarker({
     }
 
     // Find the station element
-    const stationElement = svg.querySelector<SVGGraphicsElement>(
-      `#${stationId}`,
-    );
+    const stationElement = getStationElement(svg, stationId);
     if (!stationElement) {
       console.warn(
         `[NearestStationMarker] Could not find station element: ${stationId}`,
@@ -94,15 +103,7 @@ export function NearestStationMarker({
     // Zoom to the nearest station once, when it's first determined
     // Use cached station for immediate zoom, then update if live result differs
     if (!hasScrolledToNearestRef.current) {
-      if (zoomToStation) {
-        zoomToStation(stationId);
-      } else if (stationElement) {
-        stationElement.scrollIntoView({
-          behavior: "auto",
-          block: "center",
-          inline: "center",
-        });
-      }
+      zoomToStation(stationId);
       hasScrolledToNearestRef.current = true;
     }
   }, [
