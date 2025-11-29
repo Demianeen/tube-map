@@ -9,17 +9,12 @@ Live site: [tube-map.uk](https://tube-map.uk)
 ## Features
 
 - 🗺️ **Interactive Vector Map**: High-performance SVG map with smooth pan and zoom capabilities (powered by `react-zoom-pan-pinch`).
-- 📍 **Nearest Station Locator**: Automatically detects your location and finds the closest Tube station (requires location access)
+- 📍 **Nearest Station Locator**: Automatically detects your location and finds the closest Tube station (requires location access & network).
 - 🔍 **Smart Search**: Fuzzy search for stations using `fuse.js`.
 - 🔗 **Smart station history**: Your recently selected stations are remembered for quicker access.
+- 👆 **Interactive Details**: Interact with various map elements directly (e.g. click lines directly on the map or [legend](docs/assets/legend.png) to highlight a line on the map).
 - 📱 **PWA Support**: Installable as a Progressive Web App and works offline.
 - 🎨 **Modern UI**: Clean, accessible interface built with Shadcn UI and Tailwind CSS.
-
-> **Note**: Nearest station currently relies on the browser’s geolocation API and a network connection.
-
-> **Pro Tip**: The SVG map itself is interactive – you can click stations and lines directly on the map. The legend is also interactive: click a line in the legend to highlight that line on the map.
-
-![Legend](docs/assets/legend.png)
 
 ## How it works
 
@@ -37,7 +32,7 @@ Live site: [tube-map.uk](https://tube-map.uk)
 - **Map interactions**: `react-zoom-pan-pinch`
 - **Search**: `fuse.js` with some usage‑based ranking
 - **Analytics**: PostHog
-- **Email / data requests**: Resend
+- **Email / data requests**: Resend (for GDPR compliance)
 - **PWA / offline shell**: Serwist
 
 ## Running locally
