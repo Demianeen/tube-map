@@ -6,6 +6,7 @@ import { getStationCenter } from "@/entities/map/model/station-center";
 
 interface NearestStationMarkerProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
+  zoomToStation?: (stationId: string) => void;
 }
 
 /**
@@ -19,6 +20,7 @@ interface NearestStationMarkerProps {
  */
 export function NearestStationMarker({
   mapContainerRef,
+  zoomToStation,
 }: NearestStationMarkerProps) {
   const { nearestStation, cachedNearestStation, status, locate } =
     useNearestStation();
@@ -89,17 +91,27 @@ export function NearestStationMarker({
     wrapper.setAttribute("visibility", "visible");
     wrapper.classList.add("visible");
 
-    // Scroll to the nearest station once, when it's first determined
-    // Use cached station for immediate scroll, then update if live result differs
+    // Zoom to the nearest station once, when it's first determined
+    // Use cached station for immediate zoom, then update if live result differs
     if (!hasScrolledToNearestRef.current) {
-      stationElement.scrollIntoView({
-        behavior: "auto",
-        block: "center",
-        inline: "center",
-      });
+      if (zoomToStation) {
+        zoomToStation(stationId);
+      } else if (stationElement) {
+        stationElement.scrollIntoView({
+          behavior: "auto",
+          block: "center",
+          inline: "center",
+        });
+      }
       hasScrolledToNearestRef.current = true;
     }
-  }, [mapContainerRef, effectiveStationId, nearestStation, status]);
+  }, [
+    mapContainerRef,
+    effectiveStationId,
+    nearestStation,
+    status,
+    zoomToStation,
+  ]);
 
   return null;
 }

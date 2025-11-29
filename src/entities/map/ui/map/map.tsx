@@ -2,8 +2,13 @@
 
 import Map from "@/shared/assets/map/map.svg";
 import { StationHighlight } from "./station-highlight";
+import { NearestStationMarker } from "@/features/location";
 
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import {
+  TransformWrapper,
+  TransformComponent,
+  ReactZoomPanPinchContentRef,
+} from "react-zoom-pan-pinch";
 
 interface MapComponentProps {
   highlightedStationId?: string | null;
@@ -32,19 +37,34 @@ export const MapComponent = ({
         maxScale={2}
         wheel={{ step: 0.1 }}
       >
-        <TransformComponent
-          wrapperStyle={{
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <Map />
-        </TransformComponent>
+        {({ zoomToElement }: ReactZoomPanPinchContentRef) => {
+          const zoomToStation = (stationId: string) => {
+            zoomToElement(stationId, 1, 400, "easeOut");
+          };
+
+          return (
+            <>
+              <TransformComponent
+                wrapperStyle={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <Map />
+              </TransformComponent>
+              <StationHighlight
+                mapContainerRef={mapContainerRef}
+                highlightedStationId={highlightedStationId}
+                zoomToStation={zoomToStation}
+              />
+              <NearestStationMarker
+                mapContainerRef={mapContainerRef}
+                zoomToStation={zoomToStation}
+              />
+            </>
+          );
+        }}
       </TransformWrapper>
-      <StationHighlight
-        mapContainerRef={mapContainerRef}
-        highlightedStationId={highlightedStationId}
-      />
     </div>
   );
 };

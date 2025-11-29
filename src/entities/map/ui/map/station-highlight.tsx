@@ -7,6 +7,7 @@ import { getStationCenter } from "../../model/station-center";
 interface StationHighlightProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
   highlightedStationId: string | null | undefined;
+  zoomToStation?: (stationId: string) => void;
 }
 
 const queryMapElement = (
@@ -57,6 +58,7 @@ function highlightStationElement(
 export function StationHighlight({
   mapContainerRef,
   highlightedStationId,
+  zoomToStation,
 }: StationHighlightProps) {
   useEffect(() => {
     const container = mapContainerRef.current;
@@ -95,15 +97,17 @@ export function StationHighlight({
     // Highlight the selected station
     highlightStationElement(svg, stationElement);
 
-    // Find and scroll to the station element
-    if (stationElement) {
+    // Zoom to the station element using zoomToStation if available, otherwise fallback to scrollIntoView
+    if (zoomToStation) {
+      zoomToStation(highlightedStationId);
+    } else if (stationElement) {
       stationElement.scrollIntoView({
         behavior: "smooth",
         block: "center",
         inline: "center",
       });
     }
-  }, [mapContainerRef, highlightedStationId]);
+  }, [mapContainerRef, highlightedStationId, zoomToStation]);
 
   // This component doesn't render anything - it just manipulates the SVG
   return null;
