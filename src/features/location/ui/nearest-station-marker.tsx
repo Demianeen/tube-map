@@ -43,7 +43,6 @@ export function NearestStationMarker({
 
   // Update marker position when nearest station changes
   useLayoutEffect(() => {
-    console.log("nearest station marker useLayoutEffect", isMapReady);
     if (!isMapReady) return;
 
     const svg = getMapSvg(mapContainerRef.current);
