@@ -1,8 +1,8 @@
 "use client";
 
 import posthog from "posthog-js";
-import { Map } from "@/entities/map";
 import { stations } from "@/entities/map";
+import { InteractiveMap } from "@/widgets/interactive-map";
 import { StationSearch } from "@/features/station-search";
 import { useKeyboardShortcut } from "@/shared/hooks/use-keyboard-shortcut";
 import { GithubLink } from "@/shared/ui/github-link";
@@ -118,7 +118,7 @@ export function InteractiveMapPage() {
   return (
     <div className="h-dvh">
       <div className="w-full h-full">
-        <Map
+        <InteractiveMap
           mapContainerRef={mapContainerRef}
           highlightedStationId={selectedStationId}
           onUnselect={handleUnselectFromMap}
