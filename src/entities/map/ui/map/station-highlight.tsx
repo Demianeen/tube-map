@@ -13,6 +13,7 @@ interface StationHighlightProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
   highlightedStationId: string | null | undefined;
   zoomToStation: (stationId: string) => void;
+  isMapReady: boolean;
 }
 
 function highlightStationElement(
@@ -57,8 +58,11 @@ export function StationHighlight({
   mapContainerRef,
   highlightedStationId,
   zoomToStation,
+  isMapReady,
 }: StationHighlightProps) {
   useEffect(() => {
+    if (!isMapReady) return;
+
     const svg = getMapSvg(mapContainerRef.current);
     if (!svg) return;
 
@@ -93,7 +97,7 @@ export function StationHighlight({
 
     // Zoom to the station element
     zoomToStation(highlightedStationId);
-  }, [mapContainerRef, highlightedStationId, zoomToStation]);
+  }, [mapContainerRef, highlightedStationId, zoomToStation, isMapReady]);
 
   // This component doesn't render anything - it just manipulates the SVG
   return null;

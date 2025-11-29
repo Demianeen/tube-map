@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import MapSvg from "@/shared/assets/map/map.svg";
 import { StationHighlight } from "@/entities/map/ui/map/station-highlight";
 import { NearestStationMarker } from "@/features/location";
@@ -21,6 +22,8 @@ export function InteractiveMap({
   onUnselect,
   mapContainerRef,
 }: InteractiveMapProps) {
+  const [isMapReady, setIsMapReady] = useState(false);
+
   return (
     <div
       ref={mapContainerRef}
@@ -36,6 +39,7 @@ export function InteractiveMap({
         minScale={0.25}
         maxScale={2}
         wheel={{ step: 0.1 }}
+        onInit={() => setIsMapReady(true)}
       >
         {({ zoomToElement }: ReactZoomPanPinchContentRef) => {
           // Wrapper that abstracts zoom implementation details from children
@@ -57,10 +61,12 @@ export function InteractiveMap({
                 mapContainerRef={mapContainerRef}
                 highlightedStationId={highlightedStationId}
                 zoomToStation={zoomToStation}
+                isMapReady={isMapReady}
               />
               <NearestStationMarker
                 mapContainerRef={mapContainerRef}
                 zoomToStation={zoomToStation}
+                isMapReady={isMapReady}
               />
             </>
           );

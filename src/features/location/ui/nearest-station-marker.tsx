@@ -12,6 +12,7 @@ import {
 interface NearestStationMarkerProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
   zoomToStation: (stationId: string) => void;
+  isMapReady: boolean;
 }
 
 /**
@@ -26,6 +27,7 @@ interface NearestStationMarkerProps {
 export function NearestStationMarker({
   mapContainerRef,
   zoomToStation,
+  isMapReady,
 }: NearestStationMarkerProps) {
   const { nearestStation, cachedNearestStation, status, locate } =
     useNearestStation();
@@ -41,6 +43,9 @@ export function NearestStationMarker({
 
   // Update marker position when nearest station changes
   useLayoutEffect(() => {
+    console.log("nearest station marker useLayoutEffect", isMapReady);
+    if (!isMapReady) return;
+
     const svg = getMapSvg(mapContainerRef.current);
     if (!svg) return;
 
@@ -103,7 +108,9 @@ export function NearestStationMarker({
     // Zoom to the nearest station once, when it's first determined
     // Use cached station for immediate zoom, then update if live result differs
     if (!hasScrolledToNearestRef.current) {
-      zoomToStation(stationId);
+      setTimeout(() => {
+        zoomToStation(stationId);
+      }, 100);
       hasScrolledToNearestRef.current = true;
     }
   }, [
@@ -112,6 +119,7 @@ export function NearestStationMarker({
     nearestStation,
     status,
     zoomToStation,
+    isMapReady,
   ]);
 
   return null;
